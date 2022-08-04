@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">HarbourUnspash</string>
+
+    <string name="camera">Camera</string>
+    <string name="aperture">Aperture</string>
+    <string name="focal_length">Focal Length</string>
+    <string name="shutter_speed">Shutter Speed</string>
+    <string name="iso">ISO</string>
+    <string name="dimensions">Dimensions</string>
+    <string name="views">Views</string>
+    <string name="downloads">Downloads</string>
+    <string name="likes">Likes</string>
+
+    <string name="aperture_value">f/5.0</string>
+    <string name="camera_model">NIKON D3200</string>
+    <string name="focal_length_value">18.0mm</string>
+    <string name="shutter_speed_value">1/125s</string>
+    <string name="iso_value">100</string>
+    <string name="dimensions_value">3906 x 4882</string>
+    <string name="views_values">8.8M</string>
+    <string name="downloads_values">99.1K</string>
+    <string name="likes_values">1.8K</string>
+</resources>
