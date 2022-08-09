@@ -2,6 +2,7 @@ package com.ernestico.unsplash
 
 import android.graphics.Paint
 import android.os.Bundle
+import android.util.Log
 import android.widget.Space
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -36,18 +37,25 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import com.ernestico.unsplash.model.UnsplashItem
 import com.ernestico.unsplash.ui.theme.UnsplashTheme
 
 class DetailView : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        var image = intent.getParcelableExtra<UnsplashItem>("image")
+        if (image != null) {
+            Log.d("KKK", "${image.urls?.regular}")
+        }
+
         setContent {
             MaterialTheme {
-                val context = LocalContext.current
-                val intent = (context as DetailView).intent
-                val catId = intent.getIntExtra("cat", 0)
-                val cat = Cat(catId)
-                Detail(cat)
+                if (image != null) {
+                    Detail(image)
+                }
             }
         }
     }
@@ -55,20 +63,25 @@ class DetailView : ComponentActivity() {
 
 //@Preview
 @Composable
-fun Detail(cat: Cat) {
+fun Detail(image: UnsplashItem) {
     Column(modifier = Modifier
         .verticalScroll(rememberScrollState())
         .padding(bottom = 20.dp)) {
 
         Box() {
             Image(
-                painter = painterResource(id = cat.img),
-                contentDescription = stringResource(id = R.string.cat_picture_desc),
+//                painter = painterResource(id = R.drawable.img1),
+
+                painter = rememberAsyncImagePainter(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(image.urls?.regular)
+                        .build()
+                ),
+                contentDescription = "contentImage",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(250.dp)
-                    .background(Color.Red),
-                contentScale = ContentScale.Crop
+                    .height(250.dp),
+                contentScale = ContentScale.Crop,
             )
 
             Row(modifier = Modifier
@@ -80,7 +93,6 @@ fun Detail(cat: Cat) {
                     tint = Color.White,
                     contentDescription = "location icon",
                 )
-
                 Text(
                     text = "Barcelona, Spain",
                     textAlign = TextAlign.End,
@@ -250,10 +262,6 @@ fun Detail(cat: Cat) {
                     )
                 }
             }
-
-
         }
     }
-    
-
 }
