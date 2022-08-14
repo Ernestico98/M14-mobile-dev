@@ -34,12 +34,16 @@ class MainViewModel : ViewModel(), WeatherResult, GeoResult {
     private val _useLocation = MutableLiveData<Boolean>()
     val useLocation: LiveData<Boolean> = _useLocation
 
+    private val _topBarText = MutableLiveData<String>()
+    val topBarText : LiveData<String> = _topBarText
+
     init {
         _geoResponse.value = null
         _weatherResponse.value = null
         _latitude.value = null
         _longitude.value = null
         _useLocation.value = true
+        _topBarText.value = ""
     }
 
     private val weatherProvider by lazy {
@@ -63,8 +67,21 @@ class MainViewModel : ViewModel(), WeatherResult, GeoResult {
         _latitude?.value = lat
     }
 
+    fun setTopBarText(text : String) {
+        _topBarText.value = text
+    }
+
+    fun setGeoData(geo : List<GeoDataItem>? ) {
+        _geoResponse.value = geo
+    }
+
+    fun setUseLocation(useLoc : Boolean) {
+        _useLocation.value = useLoc
+    }
+
     override fun onWeatherFetchedSuccess(weather: WeatherData) {
-        Log.d(TAG, "weather fetched {$weather}")
+        Log.d(TAG, "weather fetch $weather")
+        _weatherResponse.value = weather
     }
 
     override fun onWeatherFetchedFailed() {
@@ -72,7 +89,8 @@ class MainViewModel : ViewModel(), WeatherResult, GeoResult {
     }
 
     override fun onGeoFetchedSuccess(geo: List<GeoDataItem>) {
-        Log.d(TAG, "geo fetched {$geo}")
+        Log.d(TAG, "geo fetched $geo")
+        _geoResponse.value = geo
     }
 
     override fun onGeoFetchedFailed() {
