@@ -35,7 +35,7 @@ class GeoApiProvider {
         retrofit.fetchGeo(query = place).enqueue(object : Callback<List<GeoDataItem>> {
             override fun onResponse(call: Call<List<GeoDataItem>>, response: Response<List<GeoDataItem>>) {
                 if (response.isSuccessful && response.body() != null) {
-                    Log.d(TAG,  "fetchWeather | response : {${response.body()!!}}")
+                    Log.d(TAG,  "fetchGeo | response : {${response.body()!!}}")
                     cb.onGeoFetchedSuccess(response.body()!!)
                 } else {
                     Log.d(TAG, "${response.body()}")
@@ -44,7 +44,7 @@ class GeoApiProvider {
             }
 
             override fun onFailure(call: Call<List<GeoDataItem>>, t: Throwable) {
-                Log.e(TAG, "fetchWeather | error", t)
+                Log.e(TAG, "fetchGeo | error", t)
                 cb.onGeoFetchedFailed()
             }
         })

@@ -45,6 +45,11 @@ class MainViewModel : ViewModel(), WeatherResult, GeoResult {
     private val _navigationStack = MutableLiveData<Stack<BottomNavigationScreens>> ()
     val navigationStack : LiveData<Stack<BottomNavigationScreens>> = _navigationStack
 
+    var icons = mutableMapOf<String, Int>()
+
+    private val _selectedLocation = MutableLiveData<String?> ()
+    val selectedLocation : LiveData<String?> = _selectedLocation
+
     init {
         _geoResponse.value = null
         _weatherResponse.value = null
@@ -54,6 +59,7 @@ class MainViewModel : ViewModel(), WeatherResult, GeoResult {
         _topBarText.value = ""
         _selectedIndexBottomNavigation.value = 1
         _navigationStack.value = Stack<BottomNavigationScreens>()
+        _selectedLocation.value = null
     }
 
     private val weatherProvider by lazy {
@@ -91,6 +97,14 @@ class MainViewModel : ViewModel(), WeatherResult, GeoResult {
 
     fun setBottomNavigationIndex(index : Int) {
         _selectedIndexBottomNavigation.value = index
+    }
+
+    fun setWeatherResponse(weather: WeatherData?) {
+        _weatherResponse.value = weather
+    }
+
+    fun setSelectedLocation(place : String?) {
+        _selectedLocation.value = place
     }
 
     override fun onWeatherFetchedSuccess(weather: WeatherData) {

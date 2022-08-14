@@ -4,7 +4,19 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/compose-model-1660162375717.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/anim.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/home-48px.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/i01d.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/i01n.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/i02d.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/i02n.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/i03d.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/i03n.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/i04d.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/i04n.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/i09d.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/i09n.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/i10d.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_baseline_info_24.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_home.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_info.xml" value="0.1" />

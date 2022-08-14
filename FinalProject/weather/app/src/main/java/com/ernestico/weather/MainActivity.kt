@@ -11,10 +11,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -53,9 +50,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-        fetchLocation(fusedLocationProviderClient, mainViewModel)
+        createIconMap()
 
         setContent {
 
@@ -82,10 +78,10 @@ class MainActivity : ComponentActivity() {
                         }
 
                         Scaffold(
+                            modifier = Modifier.padding(bottom=10.dp),
                             bottomBar = {
-                                AddBottomBarNavigation(navController)
+                                    AddBottomBarNavigation(navController)
                             },
-                            modifier = Modifier.padding(start=10.dp, end=10.dp, bottom=10.dp),
                         ) {
                             Column(
                                 modifier = Modifier
@@ -99,13 +95,13 @@ class MainActivity : ComponentActivity() {
                                     composable(BottomNavigationScreens.Weather.route) {
                                         WeatherScreen(
                                             mainViewModel = mainViewModel,
-                                            navController = navController,
                                         )
                                     }
                                     composable(BottomNavigationScreens.Search.route) {
                                         SearchScreen(
                                             mainViewModel = mainViewModel,
                                             navController = navController,
+                                            fusedLocationProviderClient = fusedLocationProviderClient
                                         )
                                     }
                                     composable(BottomNavigationScreens.About.route) {
@@ -153,10 +149,8 @@ class MainActivity : ComponentActivity() {
                 "About" -> mainViewModel.setBottomNavigationIndex(2)
             }
         }
-
         super.onBackPressed()
     }
-
 
     @Composable
     fun AddBottomBarNavigation(
@@ -171,7 +165,8 @@ class MainActivity : ComponentActivity() {
         val selectedIndex = mainViewModel.selectedIndexBottomNavigation.observeAsState()
 
         BottomNavigation(
-            modifier = Modifier.clip(RoundedCornerShape(20.dp))
+            modifier = Modifier.padding(horizontal = 10.dp)
+                .clip(RoundedCornerShape(20.dp))
         ) {
             items.forEachIndexed { index, bottomNavigationScreen ->
 
@@ -193,11 +188,38 @@ class MainActivity : ComponentActivity() {
                         if (!isSelected) {
                             mainViewModel.navigationStack.value!!.push(items[mainViewModel.selectedIndexBottomNavigation.value!!])
                             mainViewModel.setBottomNavigationIndex(index)
+
+                            if (index == 0 && mainViewModel.useLocation.value == true)
+                                fetchLocationAndWeather(fusedLocationProviderClient, mainViewModel)
+
                             navController.navigate(bottomNavigationScreen.route)
                         }
                     }
                 )
             }
         }
+    }
+
+    fun createIconMap() {
+        mainViewModel.icons = mapOf<String, Int>(
+            "01d" to R.drawable.i01d,
+            "01n" to R.drawable.i01n,
+            "02d" to R.drawable.i02d,
+            "02n" to R.drawable.i02n,
+            "03d" to R.drawable.i03d,
+            "03n" to R.drawable.i03n,
+            "04d" to R.drawable.i04d,
+            "04n" to R.drawable.i04n,
+            "09d" to R.drawable.i09d,
+            "09n" to R.drawable.i09n,
+            "10d" to R.drawable.i10d,
+            "10n" to R.drawable.i10n,
+            "11d" to R.drawable.i11d,
+            "11n" to R.drawable.i11n,
+            "13d" to R.drawable.i13d,
+            "13n" to R.drawable.i13n,
+            "50d" to R.drawable.i50d,
+            "50n" to R.drawable.i50n,
+        ) as MutableMap<String, Int>
     }
 }

@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -26,6 +28,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,15 +38,17 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.ernestico.weather.MainViewModel
 import com.ernestico.weather.aimations.LoadingAnimation
-import com.ernestico.weather.fetchLocation
+import com.ernestico.weather.fetchLocationAndWeather
 import com.ernestico.weather.navigation.BottomNavigationScreens
 import com.ernestico.weather.ui.theme.DarkColors
 import com.ernestico.weather.ui.theme.LightColors
+import com.google.android.gms.location.FusedLocationProviderClient
 
 @Composable
 fun SearchScreen(
     mainViewModel: MainViewModel,
     navController: NavController,
+    fusedLocationProviderClient: FusedLocationProviderClient
 ) {
     mainViewModel.setTopBarText("Search Location")
 
@@ -61,7 +68,9 @@ fun SearchScreen(
                 .height(60.dp),
             onClick = {
                 mainViewModel.setUseLocation(true)
-                mainViewModel.setLocation(null, null)
+                mainViewModel.setWeatherResponse(null)
+                fetchLocationAndWeather(fusedLocationProviderClient, mainViewModel)
+
                 mainViewModel.setBottomNavigationIndex(0)
                 mainViewModel.navigationStack.value!!.push(BottomNavigationScreens.Search)
                 navController.navigate(BottomNavigationScreens.Weather.route)
@@ -97,11 +106,14 @@ fun SearchScreen(
             ) {
                 Spacer(modifier = Modifier.weight(0.15f))
 
+                val focusManager = LocalFocusManager.current
+
                 TextField(
                     value = textValue.value,
                     onValueChange = { value ->
                         textValue.value = value
                     },
+                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                     singleLine = true,
                     modifier = Modifier.weight(0.7f),
                     trailingIcon = {
@@ -110,6 +122,7 @@ fun SearchScreen(
                                 mainViewModel.setGeoData(null)
                                 mainViewModel.fetchGeo(place = textValue.value)
                                 showList.value = true
+                                focusManager.clearFocus()
                             }
                         ) {
                             Icon(
@@ -152,7 +165,11 @@ fun ShowPlacesList(
                             .padding(horizontal = 40.dp),
                         onClick = {
                             mainViewModel.setUseLocation(false)
+                            mainViewModel.setWeatherResponse(null)
+                            mainViewModel.setSelectedLocation(data.name)
                             mainViewModel.setLocation(lon = data.lon!!, lat = data.lat!!)
+                            mainViewModel.fetchWeather(lon = data.lon, lat = data.lat)
+
                             mainViewModel.setBottomNavigationIndex(0)
                             mainViewModel.navigationStack.value!!.push(BottomNavigationScreens.Search)
                             navController.navigate(BottomNavigationScreens.Weather.route)
