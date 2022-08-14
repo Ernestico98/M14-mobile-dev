@@ -13,7 +13,9 @@ import com.ernestico.weather.data.cb.GeoResult
 import com.ernestico.weather.data.cb.WeatherResult
 import com.ernestico.weather.data.geo_response.GeoDataItem
 import com.ernestico.weather.data.weather_response.WeatherData
+import com.ernestico.weather.navigation.BottomNavigationScreens
 import com.google.android.gms.location.FusedLocationProviderClient
+import java.util.*
 
 private val TAG = "MAIN_VIEW_MODEL"
 
@@ -37,6 +39,12 @@ class MainViewModel : ViewModel(), WeatherResult, GeoResult {
     private val _topBarText = MutableLiveData<String>()
     val topBarText : LiveData<String> = _topBarText
 
+    private val _selectedIndexBottomNavigation = MutableLiveData<Int>()
+    val selectedIndexBottomNavigation : LiveData<Int> = _selectedIndexBottomNavigation
+
+    private val _navigationStack = MutableLiveData<Stack<BottomNavigationScreens>> ()
+    val navigationStack : LiveData<Stack<BottomNavigationScreens>> = _navigationStack
+
     init {
         _geoResponse.value = null
         _weatherResponse.value = null
@@ -44,6 +52,8 @@ class MainViewModel : ViewModel(), WeatherResult, GeoResult {
         _longitude.value = null
         _useLocation.value = true
         _topBarText.value = ""
+        _selectedIndexBottomNavigation.value = 1
+        _navigationStack.value = Stack<BottomNavigationScreens>()
     }
 
     private val weatherProvider by lazy {
@@ -62,7 +72,7 @@ class MainViewModel : ViewModel(), WeatherResult, GeoResult {
         geoProvider.fetchGeo(place = place, cb = this)
     }
 
-    fun setLocation(lon: Double, lat: Double) {
+    fun setLocation(lon: Double?, lat: Double?) {
         _longitude?.value = lon
         _latitude?.value = lat
     }
@@ -77,6 +87,10 @@ class MainViewModel : ViewModel(), WeatherResult, GeoResult {
 
     fun setUseLocation(useLoc : Boolean) {
         _useLocation.value = useLoc
+    }
+
+    fun setBottomNavigationIndex(index : Int) {
+        _selectedIndexBottomNavigation.value = index
     }
 
     override fun onWeatherFetchedSuccess(weather: WeatherData) {

@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,12 +35,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.ernestico.weather.navigation.BottomNavigationScreens
 import com.ernestico.weather.screens.AboutScreen
-import com.ernestico.weather.screens.HomeScreen
 import com.ernestico.weather.screens.SearchScreen
+import com.ernestico.weather.screens.WeatherScreen
 import com.ernestico.weather.ui.theme.DarkColors
 import com.ernestico.weather.ui.theme.LightColors
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import java.util.*
 
 private val TAG = "MAIN_ACTIVITY"
 
@@ -50,6 +52,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         fetchLocation(fusedLocationProviderClient, mainViewModel)
@@ -93,19 +96,22 @@ class MainActivity : ComponentActivity() {
                                     navController = navController,
                                     startDestination = BottomNavigationScreens.Search.route
                                 ) {
-                                    composable(BottomNavigationScreens.Home.route) {
-                                        HomeScreen(
+                                    composable(BottomNavigationScreens.Weather.route) {
+                                        WeatherScreen(
                                             mainViewModel = mainViewModel,
+                                            navController = navController,
                                         )
                                     }
                                     composable(BottomNavigationScreens.Search.route) {
                                         SearchScreen(
-                                            mainViewModel = mainViewModel
+                                            mainViewModel = mainViewModel,
+                                            navController = navController,
                                         )
                                     }
                                     composable(BottomNavigationScreens.About.route) {
                                         AboutScreen(
-                                            mainViewModel = mainViewModel
+                                            mainViewModel = mainViewModel,
+                                            navController = navController
                                         )
                                     }
                                 }
@@ -120,50 +126,74 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
 
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 101)
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            )
+            != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                101
+            )
         }
     }
 
+    override fun onBackPressed() {
+        if (!mainViewModel.navigationStack.value!!.empty()) {
+            val top = mainViewModel.navigationStack.value!!.pop()
+            when(top.route) {
+                "Weather" -> mainViewModel.setBottomNavigationIndex(0)
+                "Search" -> mainViewModel.setBottomNavigationIndex(1)
+                "About" -> mainViewModel.setBottomNavigationIndex(2)
+            }
+        }
+
+        super.onBackPressed()
+    }
 
 
     @Composable
     fun AddBottomBarNavigation(
-        navController: NavHostController
+        navController: NavHostController,
     ) {
         val items = listOf(
-            BottomNavigationScreens.Home,
+            BottomNavigationScreens.Weather,
             BottomNavigationScreens.Search,
             BottomNavigationScreens.About
         )
 
-        val selectedIndex = remember { mutableStateOf(1) }
+        val selectedIndex = mainViewModel.selectedIndexBottomNavigation.observeAsState()
 
         BottomNavigation(
             modifier = Modifier.clip(RoundedCornerShape(20.dp))
         ) {
-            items.forEachIndexed { index, bottomNavigationScreens ->
+            items.forEachIndexed { index, bottomNavigationScreen ->
 
                 val isSelected = (index == selectedIndex.value)
                 BottomNavigationItem(
                     icon = {
                         Icon(
-                            painter = painterResource(id = bottomNavigationScreens.drawRess),
-                            contentDescription = stringResource(id = bottomNavigationScreens.stringResId),
+                            painter = painterResource(id = bottomNavigationScreen.drawRess),
+                            contentDescription = stringResource(id = bottomNavigationScreen.stringResId),
                             modifier = Modifier.size(24.dp)
                         )
                     },
                     label = {   
-                        Text(text = stringResource(id = bottomNavigationScreens.stringResId))
+                        Text(text = stringResource(id = bottomNavigationScreen.stringResId))
                     },
                     selected = isSelected,
                     alwaysShowLabel = true,
                     onClick = {
                         if (!isSelected) {
-                            selectedIndex.value = index
-                            navController.navigate(bottomNavigationScreens.route)
+                            mainViewModel.navigationStack.value!!.push(items[mainViewModel.selectedIndexBottomNavigation.value!!])
+                            mainViewModel.setBottomNavigationIndex(index)
+                            navController.navigate(bottomNavigationScreen.route)
                         }
                     }
                 )

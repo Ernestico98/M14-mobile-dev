@@ -18,6 +18,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,14 +29,19 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.ernestico.weather.MainViewModel
 import com.ernestico.weather.aimations.LoadingAnimation
+import com.ernestico.weather.fetchLocation
+import com.ernestico.weather.navigation.BottomNavigationScreens
 import com.ernestico.weather.ui.theme.DarkColors
 import com.ernestico.weather.ui.theme.LightColors
 
 @Composable
 fun SearchScreen(
-    mainViewModel: MainViewModel
+    mainViewModel: MainViewModel,
+    navController: NavController,
 ) {
     mainViewModel.setTopBarText("Search Location")
 
@@ -43,7 +49,6 @@ fun SearchScreen(
     val searchEnabled = remember { mutableStateOf(true) }
     val textValue = remember { mutableStateOf("") }
     val showList = remember { mutableStateOf(false) }
-    val colorTheme = if(isSystemInDarkTheme()) DarkColors else LightColors
 
     Column(
         modifier = Modifier
@@ -54,7 +59,13 @@ fun SearchScreen(
             modifier = Modifier
                 .padding(top = 40.dp)
                 .height(60.dp),
-            onClick = { /*TODO*/ }
+            onClick = {
+                mainViewModel.setUseLocation(true)
+                mainViewModel.setLocation(null, null)
+                mainViewModel.setBottomNavigationIndex(0)
+                mainViewModel.navigationStack.value!!.push(BottomNavigationScreens.Search)
+                navController.navigate(BottomNavigationScreens.Weather.route)
+            }
         ) {
             Text(
                 text = "Use Current Location",
@@ -114,13 +125,14 @@ fun SearchScreen(
         }
 
         if (showList.value)
-            ShowPlacesList(mainViewModel = mainViewModel)
+            ShowPlacesList(mainViewModel = mainViewModel, navController = navController)
     }
 }
 
 @Composable
 fun ShowPlacesList(
     mainViewModel: MainViewModel,
+    navController: NavController
 ) {
     val geoData = mainViewModel.geoResponse.observeAsState()
 
@@ -128,31 +140,35 @@ fun ShowPlacesList(
         LoadingAnimation()
     } else {
         LazyColumn(
-            modifier = Modifier.fillMaxWidth().
-                    padding(vertical = 10.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 15.dp)
         ) {
             if (geoData.value != null) {
                 items(geoData.value!!) { data ->
                     Button(
                         modifier = Modifier
-//                            .height(100.dp)
                             .fillMaxWidth()
-                            .padding(horizontal = 30.dp),
+                            .padding(horizontal = 40.dp),
                         onClick = {
                             mainViewModel.setUseLocation(false)
                             mainViewModel.setLocation(lon = data.lon!!, lat = data.lat!!)
+                            mainViewModel.setBottomNavigationIndex(0)
+                            mainViewModel.navigationStack.value!!.push(BottomNavigationScreens.Search)
+                            navController.navigate(BottomNavigationScreens.Weather.route)
                         }
                     ) {
                         Column(
                             modifier = Modifier.fillMaxWidth()
+                                .padding(5.dp)
                         ) {
-                            Text(text = "City name: ${data.name}")
+                            Text(text = "Place name: ${data.name}")
                             Text(text = "Country code: ${data.country}")
                             Text(text = "Latitude: ${data.lat}")
                             Text(text = "Longitude: ${data.lon}")
                         }
                     }
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(15.dp))
                 }
             }
         }

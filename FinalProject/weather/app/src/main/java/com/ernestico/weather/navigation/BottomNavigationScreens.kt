@@ -10,10 +10,10 @@ sealed class BottomNavigationScreens(
     @DrawableRes val drawRess: Int
 ) {
 
-    object Home: BottomNavigationScreens(
-        route = "Home",
-        R.string.main_navigation_home,
-        R.drawable.ic_home
+    object Weather: BottomNavigationScreens(
+        route = "Weather",
+        R.string.main_navigation_weather,
+        R.drawable.ic_weather
     )
 
     object Search: BottomNavigationScreens(
