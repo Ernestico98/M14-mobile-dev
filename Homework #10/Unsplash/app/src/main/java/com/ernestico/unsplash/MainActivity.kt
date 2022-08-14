@@ -2,7 +2,6 @@ package com.ernestico.unsplash
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -10,9 +9,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -27,8 +26,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import coil.compose.rememberAsyncImagePainter
@@ -36,12 +33,11 @@ import coil.request.ImageRequest
 import com.ernestico.unsplash.data.UnsplashApiProvider
 import com.ernestico.unsplash.data.cb.UnsplashResult
 import com.ernestico.unsplash.model.PhotoDetails
-import com.ernestico.unsplash.model.Result
 import com.ernestico.unsplash.model.UnsplashItem
 
 class MainActivity : ComponentActivity(), UnsplashResult {
 
-    lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: MainViewModel
     lateinit var provider: UnsplashApiProvider
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,21 +47,6 @@ class MainActivity : ComponentActivity(), UnsplashResult {
 
         provider = UnsplashApiProvider()
         provider.fetchImages(this)
-
-//        var cats = listOf<Cat>(
-//            Cat(R.drawable.img1),
-//            Cat(R.drawable.img2),
-//            Cat(R.drawable.img3),
-//            Cat(R.drawable.img4),
-//            Cat(R.drawable.img5),
-//            Cat(R.drawable.img6),
-//            Cat(R.drawable.img7),
-//        )
-//        setContent {
-//            MaterialTheme {
-//                ImageList(cats)
-//            }
-//        }
     }
 
     override fun onDataFetchedSuccess(images: List<UnsplashItem>) {
@@ -104,6 +85,7 @@ fun DataList(state: State<List<Int>?>, images : List<UnsplashItem>, viewModel : 
                 onValueChange = { value ->
                     textValue.value = value
                 },
+                singleLine = true,
                 modifier = Modifier
                     .clip(RoundedCornerShape(10.dp))
                     .background(Color.White)
@@ -121,7 +103,7 @@ fun DataList(state: State<List<Int>?>, images : List<UnsplashItem>, viewModel : 
             }
         }
 
-        LazyColumn() {
+        LazyColumn {
             itemsIndexed(images) { index, image ->
                 Box(
                     modifier = Modifier
@@ -166,36 +148,3 @@ fun DataList(state: State<List<Int>?>, images : List<UnsplashItem>, viewModel : 
         }
     }
 }
-
-
-
-//
-//@Composable
-//fun ImageList(cats: List<Cat>) {
-//    LazyColumn {
-//        items(cats) { cat ->
-//            CatItem(cat)
-//        }
-//    }
-//}
-//
-//@Composable
-//fun CatItem(cat: Cat) {
-//    val context = LocalContext.current
-//    Image(
-//        painter = painterResource(id = cat.img),
-//        contentDescription = stringResource(id = R.string.cat_picture_desc),
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .height(250.dp)
-//            .padding(horizontal = 15.dp, vertical = 10.dp)
-//            .clip(RoundedCornerShape(20.dp))
-//            .clickable {
-//                val intent = Intent(context, DetailView::class.java)
-//                intent.putExtra("cat", cat.img)
-//                context.startActivity(intent)
-//            },
-//        contentScale = ContentScale.Crop,
-//    )
-//}
-//
