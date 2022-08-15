@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Unsplash.iml" filepath="$PROJECT_DIR$/.idea/modules/Unsplash.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Unsplash.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Unsplash.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Unsplash.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Unsplash.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Unsplash.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Unsplash.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Unsplash.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Unsplash.app.unitTest.iml" />
+    </modules>
+  </component>
+</project>
