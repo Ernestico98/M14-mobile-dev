@@ -1,12 +1,8 @@
 package com.ernestico.weather
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
-import android.webkit.WebSettings
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -15,7 +11,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,6 +25,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.ernestico.weather.data.AppPreferences
 import com.ernestico.weather.navigation.BottomNavigationScreens
 import com.ernestico.weather.screens.AboutScreen
 import com.ernestico.weather.screens.SearchScreen
@@ -38,27 +34,31 @@ import com.ernestico.weather.ui.theme.DarkColors
 import com.ernestico.weather.ui.theme.LightColors
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import java.util.*
 
-private val TAG = "MAIN_ACTIVITY"
+private const val TAG = "MAIN_ACTIVITY"
 
 class MainActivity : ComponentActivity() {
 
     private val mainViewModel : MainViewModel by viewModels()
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         createIconMap()
+        val preferences = AppPreferences(this)
 
         setContent {
 
             val topBarText = mainViewModel.topBarText.observeAsState()
+            val systemDarkMode = isSystemInDarkTheme()
+            var darkMode = remember { mutableStateOf(preferences.getDarkTheme(systemDarkMode)) }
 
             MaterialTheme(
-                colors = if(isSystemInDarkTheme()) DarkColors else LightColors
+                colors = if(darkMode.value) DarkColors else LightColors
             ) {
                 val navController = rememberNavController()
 
@@ -75,6 +75,38 @@ class MainActivity : ComponentActivity() {
                                 fontSize = 22.sp,
                                 modifier = Modifier.padding(10.dp)
                             )
+                            
+                            Spacer(modifier = Modifier.weight(1f))
+
+                            IconButton(
+                                onClick = {
+                                    darkMode.value = !darkMode.value
+                                    preferences.setDarkTheme(darkMode.value)
+                                },
+                                modifier = Modifier.padding(end=10.dp)
+                                    .size(40.dp)
+                            ) {
+                                if (darkMode.value) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.light_mode),
+                                        contentDescription = "Theme mode icon"
+                                    )
+                                } else {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.dark_mode),
+                                        contentDescription = "Theme mode icon"
+                                    )
+                                }
+
+                            }
+
+//                            Switch(
+//                                checked = darkMode.value,
+//                                onCheckedChange =  {
+//                                    darkMode.value = !darkMode.value
+//                                    preferences.setDarkTheme(darkMode.value)
+//                                }
+//                            )
                         }
 
                         Scaffold(
@@ -124,7 +156,7 @@ class MainActivity : ComponentActivity() {
 
         if (ActivityCompat.checkSelfPermission(
                 this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION
+                Manifest.permission.ACCESS_FINE_LOCATION
             )
             != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
                 this,
@@ -134,7 +166,7 @@ class MainActivity : ComponentActivity() {
         ) {
             ActivityCompat.requestPermissions(
                 this,
-                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 101
             )
         }
@@ -165,8 +197,9 @@ class MainActivity : ComponentActivity() {
         val selectedIndex = mainViewModel.selectedIndexBottomNavigation.observeAsState()
 
         BottomNavigation(
-            modifier = Modifier.padding(horizontal = 10.dp)
-                .clip(RoundedCornerShape(20.dp))
+            modifier = Modifier
+                .padding(horizontal = 10.dp)
+                .clip(RoundedCornerShape(30.dp))
         ) {
             items.forEachIndexed { index, bottomNavigationScreen ->
 
@@ -200,7 +233,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    fun createIconMap() {
+    private fun createIconMap() {
         mainViewModel.icons = mapOf<String, Int>(
             "01d" to R.drawable.i01d,
             "01n" to R.drawable.i01n,

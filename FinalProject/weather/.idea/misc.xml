@@ -5,6 +5,7 @@
       <map>
         <entry key="../../../../layout/compose-model-1660162375717.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/anim.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/dark_mode_.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/home-48px.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/i01d.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/i01n.xml" value="0.1" />
@@ -24,6 +25,7 @@
         <entry key="app/src/main/res/drawable/ic_search.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_weather.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/info-48px.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/light_mode.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/menu-48px.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/search-48px.xml" value="0.1" />
       </map>
