@@ -1,9 +1,10 @@
 <component name="libraryTable">
   <library name="Gradle: io.coil-kt:coil-compose:2.1.0@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/ff36d7e5c161e2c6d4edec2c7cecbc36/transformed/coil-compose-2.1.0/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/ff36d7e5c161e2c6d4edec2c7cecbc36/transformed/coil-compose-2.1.0/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/ff36d7e5c161e2c6d4edec2c7cecbc36/transformed/coil-compose-2.1.0/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/138d4673fa68c5c2e8a394781cb57ecd/transformed/coil-compose-2.1.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/138d4673fa68c5c2e8a394781cb57ecd/transformed/coil-compose-2.1.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/138d4673fa68c5c2e8a394781cb57ecd/transformed/coil-compose-2.1.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.coil-kt/coil-compose/2.1.0/f4da9b5d0b062287ba3cac1af645693d363a9853/coil-compose-2.1.0-javadoc.jar!/" />

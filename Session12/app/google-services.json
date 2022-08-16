@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "603309312322",
+    "project_id": "splashiness",
+    "storage_bucket": "splashiness.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:603309312322:android:730b2ce1221e77cfe6e0db",
+        "android_client_info": {
+          "package_name": "com.harbourspace.unsplash"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "603309312322-csor71rk2se6cj2qu04p2hvlmri71enp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoWOqp_dJcgv6lUNIEUFgTH3INVSx2aME"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "603309312322-csor71rk2se6cj2qu04p2hvlmri71enp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

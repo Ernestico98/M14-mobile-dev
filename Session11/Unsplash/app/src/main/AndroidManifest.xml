@@ -4,7 +4,9 @@
     package="com.ernestico.unsplash">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
+        android:name=".AppApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"

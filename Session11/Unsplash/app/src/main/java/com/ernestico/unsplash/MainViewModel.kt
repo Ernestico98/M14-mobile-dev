@@ -1,16 +1,17 @@
 package com.ernestico.unsplash
 
-import android.util.Log
-import android.util.MutableBoolean
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.ernestico.unsplash.databaseModel.UnsplashModel
+
+import com.ernestico.unsplash.databaseModel.UnsplashRepository
 import com.ernestico.unsplash.model.UnsplashItem
 
-class MainViewModel : ViewModel() {
+class MainViewModel(
+    private val repository: UnsplashRepository
+) : ViewModel() {
     private val _unsplashItems = MutableLiveData<List<UnsplashItem>>()
     val unsplashItems : LiveData<List<UnsplashItem>> = _unsplashItems
 
@@ -26,6 +27,14 @@ class MainViewModel : ViewModel() {
         return _clickCounter.value?.get(index) ?: 0
     }
 
+    fun getImagesFromDatabase(): LiveData<List<UnsplashModel>> {
+        return repository.allUnsplash
+    }
+
+    fun addImage(image : UnsplashModel) {
+        repository.insert(image)
+    }
+
     fun incrementClickCounter(index: Int) : Unit {
         val temp = _clickCounter.value?.toMutableList() ?: mutableListOf()
         temp[index] += 1
@@ -33,3 +42,15 @@ class MainViewModel : ViewModel() {
     }
 }
 
+class MainViewModelFactory(
+    private val repository: UnsplashRepository
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return MainViewModel(repository) as T
+        }
+
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}

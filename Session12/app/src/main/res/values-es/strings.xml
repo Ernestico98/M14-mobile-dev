@@ -1,0 +1,56 @@
+<resources>
+    <string name="app_name">Unsplash</string>
+
+    <!-- Main -->
+    <string name="main_item_clicked">Has hecho clic en: %d</string>
+    <string name="main_unable_to_fetch_images">No se pueden obtener imágenes en este momento.</string>
+    <string name="main_search_hint">Buscar un tema</string>
+
+    <string name="main_tab_images">IMÁGENES</string>
+    <string name="main_tab_collections">COLLECCIONES</string>
+
+    <string name="main_navigation_home">Hogar</string>
+    <string name="main_navigation_favourites">Favoritas</string>
+    <string name="main_navigation_about">Sobre</string>
+
+    <!-- Image Details -->
+    <string name="details_camera_title">Cámera</string>
+    <string name="details_camera_default">NIKON D3200</string>
+
+    <string name="details_aperture_title">Abertura</string>
+    <string name="details_aperture_default">f/5.0</string>
+
+    <string name="details_focal_title">Longitud Focal</string>
+    <string name="details_focal_default">18.0mm</string>
+
+    <string name="details_shutter_title">Velocidad de Obturación</string>
+    <string name="details_shutter_default">1/125s</string>
+
+    <string name="details_iso_title">ISO</string>
+    <string name="details_iso_default">100</string>
+
+    <string name="details_dimensions_title">Dimensiones</string>
+    <string name="details_dimensions_default">3906 x 4882</string>
+
+    <string name="details_views_title">Vistas</string>
+    <string name="details_views_default">8.8M</string>
+
+    <string name="details_downloads_title">Descargas</string>
+    <string name="details_downloads_default">99.1K</string>
+
+    <string name="details_likes_title">Gustos</string>
+    <string name="details_likes_default">1.8K</string>
+
+    <!-- Favourites -->
+    <string name="favourites_screen">Pantalla de favoritos</string>
+
+    <!-- About -->
+    <string name="about_text">Esta es una aplicación de exhibición que usa Jetpack Compose con la API Unsplash</string>
+    <string name="about_dark_theme">Tema oscuro</string>
+
+    <!-- Content Description -->
+    <string name="description_image_preview">Imagen de tendencia</string>
+    <string name="description_android">Android logo</string>
+    <string name="description_kotlin">Kotlin logo</string>
+    <string name="description_search">Buscar un tema</string>
+</resources>
